@@ -4,7 +4,7 @@ html, body {
   margin: 0;
   height: 100%;
   width: 100%;
-  background-color: #000;
+  background-color: #22252A;
 }
 #sprites {
   position: absolute;
@@ -15,7 +15,8 @@ html, body {
   margin-left: -160px;
   width: 320px;
   height: 480px;
-  background: url(logo.svg) center no-repeat;
+  background:  url(logo.svg) center no-repeat;
+  background-size: contain;
 }
 #sprites div {
   position: absolute;
