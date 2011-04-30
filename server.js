@@ -1,13 +1,16 @@
-var Connect = require('connect'),
+var Stack = require('stack'),
+    Creationix = require('creationix'),
+    Http = require('http'),
     io = require('socket.io');
 
 // Allow the user to specify the port via environment variables
 var PORT = process.env.PORT || 8080;
 
 // Serve static files in the web folder
-var server = Connect.createServer(
-  Connect.staticProvider(__dirname + '/web')
-);
+var server = Http.createServer(Stack(
+  Creationix.log(),
+  Creationix.static("/", __dirname + "/web", "index.html")
+));
 
 // Listen to socket.io traffic too
 var socket = io.listen(server);

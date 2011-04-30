@@ -15,12 +15,12 @@ html, body {
   margin-left: -160px;
   width: 320px;
   height: 480px;
-  background:  url(logo.svg) center no-repeat;
+  background:  url(logo.png) center no-repeat;
   background-size: contain;
 }
 #sprites div {
   position: absolute;
-  background: url(sprites.svg);
+  background: url(sprites.png);
   border-radius: 24px;
   width: 74px;
   height: 64px;
