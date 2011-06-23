@@ -134,7 +134,6 @@ window.addEventListener('load', function () {
   });
 
   socket.on('move', function (params) {
-    console.dir(params);
     if (selected && params.id === selected.id) {
       selected.deselect();
     }
