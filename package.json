@@ -2,5 +2,8 @@
 , "version" : "0.0.1"
 , "description" : "An example node program using web sockets"
 , "scripts" : { "start" : "node server.js" }
-, "dependencies" : { "connect" : "0.5", "socket.io" : "0.6" }
+, "dependencies" : { 
+    "stack" : ">=0.0.3",
+    "creationix" : ">=0.1.2",
+    "socket.io" : ">=0.7" }
 }

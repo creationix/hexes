@@ -57,7 +57,7 @@ function Space(x, y) {
 Tile.adopt(Space);
 Space.prototype.onClick = function (evt) {
   if (selected) {
-    socket.send({move: {id: selected.id, x: this.x, y: this.y}});
+    socket.emit('move', {id: selected.id, x: this.x, y: this.y}); 
     selected.deselect();
   }
 };
@@ -111,19 +111,30 @@ Piece.prototype.deselect = function () {
 Piece.prototype.onClick = Piece.prototype.select;
 
 ///////////////////////////////////////////////////////////////////////////////
-//                           External API Commands                           //
+//                           Initialization of window                        //
 ///////////////////////////////////////////////////////////////////////////////
-Commands = {
-  reload: function () {
+window.addEventListener('load', function () {
+
+  // Connect to the backend server for duplex communication
+  if (window.location.protocol === 'file:') {
+    socket = io.connect("http://localhost:8080/");
+  } else {
+    socket = io.connect();
+  }
+
+  socket.on('reload', function () {
     window.location.reload();
-  },
-  map: function (map) {
+  });
+
+  socket.on('map', function (map) {
     Object.keys(map).forEach(function (id) {
       var params = map[id];
       var piece = new Piece(params.x, params.y, id);
     });
-  },
-  move: function (params) {
+  });
+
+  socket.on('move', function (params) {
+    console.dir(params);
     if (selected && params.id === selected.id) {
       selected.deselect();
     }
@@ -131,50 +142,8 @@ Commands = {
     var distance = Math.sqrt((piece.x - params.x) * (piece.x - params.x) +
                              (piece.y - params.y) * (piece.y - params.y));
     piece.moveTo(params.x, params.y, distance / 5);
-  }
-};
-
-
-///////////////////////////////////////////////////////////////////////////////
-//                           Initialization of window                        //
-///////////////////////////////////////////////////////////////////////////////
-window.addEventListener('load', function () {
-
-  // Connect to the backend server for duplex communication
-  if (window.location.protocol === 'file:') {
-    socket = new io.Socket("creationix.com", {
-      port: 8080,
-      transports: ['xhr-polling']
-    });
-  } else {
-    socket = new io.Socket();
-  }
-  var flail = true;
-  function tryConnect() {
-    if (flail) {
-      socket.connect();
-    }
-  }
-  setTimeout(tryConnect);
-  setInterval(tryConnect, 10000);
-  socket.on('connect', function () {
-    flail = false;
-  });
-  socket.on('disconnect', function () {
-    console.error("Got disconnected from server!");
-    flail = true;
   });
 
-  // Forward messages from the backend to the Commands object in the client
-  socket.on('message', function (message) {
-    Object.keys(message).forEach(function (command) {
-      if (Commands.hasOwnProperty(command)) {
-        Commands[command](message[command]);
-      } else {
-        console.error("Invalid command " + command);
-      }
-    });
-  });
 
   // Store a reference to the container div in the dom
   container = document.getElementById('sprites');
