@@ -120,7 +120,7 @@ window.addEventListener('load', function () {
   errorPane = document.getElementById('offline');
 
   document.querySelector('button').addEventListener('click', function () {
-    socket.connect();
+    socket.socket.connect();
   });
 
   // Connect to the backend server for duplex communication
