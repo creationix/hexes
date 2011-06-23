@@ -28,10 +28,10 @@ var map = {
 
 // Every time a new client connects or reconnects, we get this
 io.sockets.on('connection', function (client) {
-  
+
   // Send the client te initial map
   client.emit('map', map);
-  
+
   // In this simple example, we re-broadcast the move to all clients.
   // In a real game there would some rule checking and other logic here.
   client.on('move', function (params) {

@@ -37,4 +37,18 @@ html, body {
 #sprites .orange { background-position: 0px 192px; }
 #sprites .green { background-position: 0px 128px; }
 #sprites .yellow { background-position: 0px 64px; }
+#offline {
+  background-color: #22252A;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  padding: 30px;
+  color: #08f;
+  font-weight: bold;
+  text-align: center;
+  font-size: 40px;
+}
 

@@ -7,7 +7,7 @@ var socket, // socket.io connection with server
 
 // Number to color lookup table.
 // The backend sends numbers, the css expects strings.
-var colors = ['space', 'red', 'brown', 'purple', 'blue', 'orange', 
+var colors = ['space', 'red', 'brown', 'purple', 'blue', 'orange',
               'green', 'yellow'];
 
 var selected, // The currently selected piece (if any)
@@ -57,7 +57,7 @@ function Space(x, y) {
 Tile.adopt(Space);
 Space.prototype.onClick = function (evt) {
   if (selected) {
-    socket.emit('move', {id: selected.id, x: this.x, y: this.y}); 
+    socket.emit('move', {id: selected.id, x: this.x, y: this.y});
     selected.deselect();
   }
 };
@@ -115,6 +115,14 @@ Piece.prototype.onClick = Piece.prototype.select;
 ///////////////////////////////////////////////////////////////////////////////
 window.addEventListener('load', function () {
 
+  // Store a reference to the container div in the dom
+  container = document.getElementById('sprites');
+  errorPane = document.getElementById('offline');
+
+  document.querySelector('button').addEventListener('click', function () {
+    socket.connect();
+  });
+
   // Connect to the backend server for duplex communication
   if (window.location.protocol === 'file:') {
     socket = io.connect(REMOTE_SERVER);
@@ -143,9 +151,16 @@ window.addEventListener('load', function () {
     piece.moveTo(params.x, params.y, distance / 5);
   });
 
+  socket.on('connect', function () {
+    errorPane.style.display = "none";
+  });
 
-  // Store a reference to the container div in the dom
-  container = document.getElementById('sprites');
+  socket.on('disconnect', function () {
+    errorPane.style.display = "block";
+  });
+
+
+
 
   // Always fit the sprite container to the window and even auto-rotate
   var width = container.clientWidth,
@@ -156,10 +171,10 @@ window.addEventListener('load', function () {
     var vertical = (height > width) === (winHeight > winWidth);
     var transform;
     if (vertical) {
-      transform = "scale(" + 
+      transform = "scale(" +
         Math.min(winWidth / width, winHeight / height) + ")";
     } else {
-      transform = "scale(" + 
+      transform = "scale(" +
         Math.min(winWidth / height, winHeight / width) + ") rotate(-90deg)";
     }
     container.style.webkitTransform = transform;
