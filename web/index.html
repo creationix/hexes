@@ -7,10 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <script>
         REMOTE_SERVER = "http://creationix.com:8080";
-        document.write('<script src="' +
-            (location.protocol === "file:" ?
-            REMOTE_SERVER + "/socket.io/socket.io.js" :
-            "/socket.io/socket.io.js") + '"><' + '/script>\n');
+        document.write('<script src="' + (location.protocol === "file:" ? REMOTE_SERVER : "") + '/socket.io/socket.io.js"><' + '/script>\n');
     </script>
     <script src="client.js"></script>
     <link href="art/style.css" rel="stylesheet" type="text/css"/>
