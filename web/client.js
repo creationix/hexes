@@ -117,7 +117,7 @@ window.addEventListener('load', function () {
 
   // Connect to the backend server for duplex communication
   if (window.location.protocol === 'file:') {
-    socket = io.connect("http://localhost:8080/");
+    socket = io.connect(REMOTE_SERVER);
   } else {
     socket = io.connect();
   }
