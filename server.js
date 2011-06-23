@@ -14,6 +14,23 @@ var server = Http.createServer(Stack(
 // Listen to socket.io traffic too
 var io = require('socket.io').listen(server);
 
+io.configure('production', function(){
+  io.enable('browser client minification');
+  io.enable('browser client etag');
+  io.set('log level', 1);
+  io.set('transports', [
+    'websocket',
+    'flashsocket',
+    'htmlfile',
+    'xhr-polling',
+    'jsonp-polling',
+  ]);
+});
+
+io.configure('development', function(){
+  io.set('transports', ['websocket']);
+});
+
 // Keep a mapping of all the pieces in the game
 var map = {
   1: {x: 1, y: 0},
@@ -36,6 +53,9 @@ io.sockets.on('connection', function (client) {
   // In a real game there would some rule checking and other logic here.
   client.on('move', function (params) {
     io.sockets.emit('move', params);
+    var node = map[params.id];
+    node.x = params.x;
+    node.y = params.y;
   });
 
 });
