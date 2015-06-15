@@ -15,18 +15,18 @@ html, body {
   margin-left: -160px;
   width: 320px;
   height: 480px;
-  background:  url(logo.png) center no-repeat;
+  background:  url(logo.svg) center no-repeat;
   background-size: contain;
 }
 #sprites div {
   position: absolute;
-  background: url(sprites.png);
+  background: url(sprites.svg);
   border-radius: 24px;
   width: 74px;
   height: 64px;
-  -webkit-transition-property: -webkit-transform;
-  -webkit-transition-duration: 1s;
-  -webkit-transition-timing-function: linear;
+  transition-property: transform;
+  transition-duration: 1s;
+  transition-timing-function: linear;
 }
 #sprites .highlight { background-position: 0px 0px; }
 #sprites .space { background-position: 0px 512px; }
@@ -51,4 +51,3 @@ html, body {
   text-align: center;
   font-size: 40px;
 }
-

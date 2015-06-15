@@ -1,7 +1,7 @@
 /*global PalmSystem io */
 
-// Set up a socket.io channel with the backend server
-var socket, // socket.io connection with server
+// Set up a websocket channel with the backend server
+var socket, // websocket connection with server
     Commands, // Local commands the server can send us
     container; // The HTML container for all the Sprites
 
@@ -36,7 +36,7 @@ Tile.prototype.setTransform = function (x, y) {
   this.y = y;
   var px = x * 55 + 10,
       py = 47 + y * 64 - (x % 2) * 32;
-  this.div.style.webkitTransform = "translate3d(" + px + "px, " + py + "px, 0)";
+  this.div.style.transform = "translate3d(" + px + "px, " + py + "px, 0)";
 };
 Tile.prototype.destroy = function () {
   container.removeChild(this.div);
@@ -57,7 +57,9 @@ function Space(x, y) {
 Tile.adopt(Space);
 Space.prototype.onClick = function (evt) {
   if (selected) {
-    socket.emit('move', {id: selected.id, x: this.x, y: this.y});
+    socket.send(JSON.stringify({
+      move: {id: selected.id, x: this.x, y: this.y}
+    }));
     selected.deselect();
   }
 };
@@ -92,7 +94,7 @@ Piece.prototype.renderDiv = function () {
 Piece.prototype.moveTo = function (x, y, time) {
   time = time || 1;
   this.div.style.zIndex = zIndex++;
-  this.div.style.webkitTransitionDuration = time + "s";
+  this.div.style.transitionDuration = time + "s";
   this.setTransform(x, y);
 };
 Piece.prototype.select = function () {
@@ -124,43 +126,38 @@ window.addEventListener('load', function () {
   });
 
   // Connect to the backend server for duplex communication
-  if (window.location.protocol === 'file:') {
-    socket = io.connect(REMOTE_SERVER);
-  } else {
-    socket = io.connect();
-  }
+  var url = "" + window.location
+  url = url.replace(/^http/, "ws").replace(/[^\/]*$/, "") + "socket";
+  socket = new WebSocket(url, ["hexes"]);
 
-  socket.on('reload', function () {
-    window.location.reload();
-  });
-
-  socket.on('map', function (map) {
-    Object.keys(map).forEach(function (id) {
-      var params = map[id];
-      var piece = new Piece(params.x, params.y, id);
-    });
-  });
-
-  socket.on('move', function (params) {
-    if (selected && params.id === selected.id) {
-      selected.deselect();
+  socket.onmessage = function (evt) {
+    var data = JSON.parse(evt.data);
+    if (data.map) {
+      var map = data.map;
+      Object.keys(map).forEach(function (id) {
+        var params = map[id];
+        var piece = new Piece(params.x, params.y, id);
+      });
     }
-    var piece = pieces[params.id];
-    var distance = Math.sqrt((piece.x - params.x) * (piece.x - params.x) +
-                             (piece.y - params.y) * (piece.y - params.y));
-    piece.moveTo(params.x, params.y, distance / 5);
-  });
+    else if (data.move) {
+      var params = data.move;
+      if (selected && params.id === selected.id) {
+        selected.deselect();
+      }
+      var piece = pieces[params.id];
+      var distance = Math.sqrt((piece.x - params.x) * (piece.x - params.x) +
+                               (piece.y - params.y) * (piece.y - params.y));
+      piece.moveTo(params.x, params.y, distance / 5);
+    }
+  };
 
-  socket.on('connect', function () {
+  socket.onconnect = function (evt) {
     errorPane.style.display = "none";
-  });
+  };
 
-  socket.on('disconnect', function () {
+  socket.onerror = function (evt) {
     errorPane.style.display = "block";
-  });
-
-
-
+  }
 
   // Always fit the sprite container to the window and even auto-rotate
   var width = container.clientWidth,
@@ -177,7 +174,7 @@ window.addEventListener('load', function () {
       transform = "scale(" +
         Math.min(winWidth / height, winHeight / width) + ") rotate(-90deg)";
     }
-    container.style.webkitTransform = transform;
+    container.style.transform = transform;
   }
   window.addEventListener('resize', onResize);
   onResize();
