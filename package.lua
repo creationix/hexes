@@ -1,7 +1,10 @@
 return {
   name = "creationix/hexes",
-  version = "2.0.1",
-  description = "An example luvit program using web sockets",
+  version = "2.0.2",
+  description = "An example luvi app using web sockets",
+  homepage = "https://github.com/creationix/hexes",
+  tags = {"game", "example"},
+  license = "MIT",
   dependencies = {
     "creationix/weblit-websocket",
     "creationix/weblit-app",
