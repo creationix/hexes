@@ -22,3 +22,5 @@ require('weblit-app')
   }, require('./game'))
 
   .start()
+
+require('uv').run()
