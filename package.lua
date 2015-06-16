@@ -1,6 +1,6 @@
 return {
   name = "creationix/hexes",
-  version = "2.0.0",
+  version = "2.0.1",
   description = "An example luvit program using web sockets",
   dependencies = {
     "creationix/weblit-websocket",
