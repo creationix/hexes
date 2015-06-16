@@ -2,7 +2,17 @@
 
 This is a simple game that uses a luvit server to sync up piece movements between all players.
 
-Before you can run this, you need some dependencies installed.
+## Get it!
+
+All you need is lit installed on your system.  You then downlaod and build this using:
+
+    lit make lit://creationix/hexes
+
+This will build an executible in your current directory.  Run it with either `./hexes` on unix systems or `hexes.exe` on windows.
+
+## Running as Luvit Script
+
+You can also run the script directly using luvit or luvi.
 
 Once the code is checked out, run this from the root of the code tree and lit will grab all the dependencies automatically.
 
@@ -10,8 +20,14 @@ Once the code is checked out, run this from the root of the code tree and lit wi
 
 To start the server simply type the following in this folder:
 
-    luvit server.lua
+    luvit main.lua
 
-Then go to http://localhost:8080/ in a modern browser to see the game served from your local laptop.
+Or run as an unpackaged luvi app with:
+
+    luvi .
+
+## Testing
+
+Once the server is running, go to http://localhost:8080/ in a modern browser to see the game served from your local laptop.
 
 To play, simply click (or tap) on a piece, and then click where you want it to go.  Open the same url in a couple browser windows to see them stay synced.
