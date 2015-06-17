@@ -1,14 +1,29 @@
 # Hexes
 
-This is a simple game that uses a luvit server to sync up piece movements between all players.
+This is a simple game that run above a luvi http server and WebSocket to sync up piece movements between all players.
 
 ## Get it!
 
-All you need is lit installed on your system.  You then downlaod and build this using:
+All you need is [lit](https://github.com/luvit/lit#installing-lit) installed on your system . 
+
+You then download and build this using:
 
     lit make lit://creationix/hexes
+    
+This will build an executable in your current directory
+    
+##Run it!
 
-This will build an executible in your current directory.  Run it with either `./hexes` on unix systems or `hexes.exe` on windows.
+###unix
+
+```bash
+    ./hexes
+```
+###windows
+    
+```PowerShell
+    hexes.exe
+```
 
 ## Running as Luvit Script
 
