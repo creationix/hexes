@@ -75,7 +75,7 @@ function Piece(x, y, colorCode) {
     return pieces[colorCode];
   }
   // Create a new Piece and put in the index
-  Tile.call(this, x, y, colorCode);
+  Tile.call(this, x, y, colorCode + 1);
   // In this simple I'm using the colorCode as the ID, in a real game these
   // probably need to be separate
   this.id = colorCode;
@@ -134,8 +134,7 @@ window.addEventListener('load', function () {
     var data = JSON.parse(evt.data);
     if (data.map) {
       var map = data.map;
-      Object.keys(map).forEach(function (id) {
-        var params = map[id];
+      map.forEach(function (params, id) {
         var piece = new Piece(params.x, params.y, id);
       });
     }
