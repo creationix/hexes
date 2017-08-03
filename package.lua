@@ -1,6 +1,6 @@
 return {
   name = "creationix/hexes",
-  version = "3.0.0",
+  version = "3.0.1",
   description = "An example luvi app using web sockets",
   homepage = "https://github.com/creationix/hexes",
   tags = {"game", "example"},
