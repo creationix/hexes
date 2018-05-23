@@ -6,7 +6,7 @@ require('weblit-websocket')
 require('weblit-app')
 
   .bind {
-    host = env.get('HOST') or "localhost",
+    host = env.get('HOST') or "0.0.0.0",
     -- Allow the user to specify the port via environment variables
     port = env.get('PORT') or 8080,
   }
